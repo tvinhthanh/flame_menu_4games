@@ -7,7 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:rive/rive.dart' as rive;
 import 'package:flame_rive/flame_rive.dart';
 
-class LottiesGame extends FlameGame with TapDetector, DoubleTapDetector {
+class LottiesGame extends FlameGame {
   // --- FILE 1 ---
   static const _file1 = 'assets/rive/Test1_Title.riv';
   static const _artboard1 = 'Artboard';
@@ -67,7 +67,10 @@ class LottiesGame extends FlameGame with TapDetector, DoubleTapDetector {
     _testAnims
       ..clear()
       ..addAll(
-        [_animIn, _animOut].where((name) => ab1.animations.any((a) => a.name == name)),
+        [
+          _animIn,
+          _animOut,
+        ].where((name) => ab1.animations.any((a) => a.name == name)),
       );
 
     if (_testAnims.isNotEmpty) {
@@ -158,7 +161,7 @@ class LottiesGame extends FlameGame with TapDetector, DoubleTapDetector {
 
   // ---------- Gestures ----------
   @override
-  void onTapDown(TapDownInfo _) {
+  void onTapDown(TapDownEvent _) {
     if (_smCtrl2 != null) {
       // Toggle In/Out (simple heuristic)
       if (_inFire != null && _outFire != null) {
@@ -181,10 +184,12 @@ class LottiesGame extends FlameGame with TapDetector, DoubleTapDetector {
   }
 
   @override
-  void onDoubleTap() {
+  void onDoubleTapDown(TapDownEvent _) {
     if (_ctrl1 != null) _ctrl1!.isActive = !_ctrl1!.isActive;
-    if (_smCtrl2 != null) _smCtrl2!.isActive = !_smCtrl2!.isActive;
-    else if (_ctrl2 != null) _ctrl2!.isActive = !_ctrl2!.isActive;
+    if (_smCtrl2 != null)
+      _smCtrl2!.isActive = !_smCtrl2!.isActive;
+    else if (_ctrl2 != null)
+      _ctrl2!.isActive = !_ctrl2!.isActive;
   }
 
   // ---------- Layout ----------

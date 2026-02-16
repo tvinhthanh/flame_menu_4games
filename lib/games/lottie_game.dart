@@ -7,13 +7,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:rive/rive.dart' as rive;
 
-class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
+class RiveShowcaseGame extends FlameGame {
   // === CHỈNH LẠI CHO KHỚP FILE CỦA BẠN ===
-  static const _filePath     = 'assets/rive/TestAdvanced.riv';
-  static const _artboardName = 'Artboard';          // '' nếu muốn dùng mainArtboard
-  static const _smName       = 'State Machine 1';   // tên State Machine trong file .riv (nếu có)
-  static const _smBool       = 'HoverOn';           // tên input Bool trong SM (nếu có)
-  static const _fallbackAnim = 'Blink';             // animation fallback nếu không có SM
+  static const _filePath = 'assets/rive/TestAdvanced.riv';
+  static const _artboardName = 'Artboard'; // '' nếu muốn dùng mainArtboard
+  static const _smName =
+      'State Machine 1'; // tên State Machine trong file .riv (nếu có)
+  static const _smBool = 'HoverOn'; // tên input Bool trong SM (nếu có)
+  static const _fallbackAnim = 'Blink'; // animation fallback nếu không có SM
   // ======================================
 
   RiveComponent? _comp;
@@ -39,8 +40,8 @@ class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
 
     // 1) Load .riv & chọn artboard
     final bytes = await rootBundle.load(_filePath);
-    final file  = rive.RiveFile.import(bytes);
-    final ab    = _artboardName.isNotEmpty
+    final file = rive.RiveFile.import(bytes);
+    final ab = _artboardName.isNotEmpty
         ? (file.artboardByName(_artboardName) ?? file.mainArtboard)
         : file.mainArtboard;
     ab.advance(0);
@@ -76,7 +77,9 @@ class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
         _playAnim(start);
       } else {
         if (kDebugMode) {
-          debugPrint('[RiveShowcase] No SM and no animations found on artboard "${ab.name}".');
+          debugPrint(
+            '[RiveShowcase] No SM and no animations found on artboard "${ab.name}".',
+          );
         }
       }
     }
@@ -95,7 +98,10 @@ class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
   // === Helpers ===
 
   // Dò một SMIBool theo tên (dự phòng nếu findSMI<bool> trả null)
-  rive.SMIInput<bool>? _findSMIBool(rive.StateMachineController sm, String name) {
+  rive.SMIInput<bool>? _findSMIBool(
+    rive.StateMachineController sm,
+    String name,
+  ) {
     for (final i in sm.inputs) {
       if (i is rive.SMIBool && i.name == name) {
         return i; // SMIBool extends SMIInput<bool>
@@ -121,10 +127,15 @@ class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
     if (kDebugMode) debugPrint('[RiveShowcase] ▶️ Playing animation: $name');
   }
 
-  void _debugLogInputsAndAnims(rive.Artboard ab, rive.StateMachineController sm) {
+  void _debugLogInputsAndAnims(
+    rive.Artboard ab,
+    rive.StateMachineController sm,
+  ) {
     if (!kDebugMode) return;
     final anims = ab.animations.map((a) => a.name).join(', ');
-    debugPrint('[RiveShowcase] 🎞️ Animations: ${anims.isEmpty ? "<none>" : anims}');
+    debugPrint(
+      '[RiveShowcase] 🎞️ Animations: ${anims.isEmpty ? "<none>" : anims}',
+    );
     for (final i in sm.inputs) {
       debugPrint('[RiveShowcase] 🧠 Input -> ${i.runtimeType} "${i.name}"');
     }
@@ -133,7 +144,7 @@ class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
   // === Gestures ===
 
   @override
-  void onTapDown(TapDownInfo _) {
+  void onTapDown(TapDownEvent _) {
     if (_smCtrl != null) {
       // Đang dùng State Machine: tap để toggle HoverOn (nếu có)
       if (_hoverInput != null) {
@@ -151,7 +162,7 @@ class RiveShowcaseGame extends FlameGame with TapDetector, DoubleTapDetector {
   }
 
   @override
-  void onDoubleTap() {
+  void onDoubleTapDown(TapDownEvent _) {
     if (_ctrl == null) return;
     _ctrl!.isActive = !_ctrl!.isActive; // pause / resume
     if (kDebugMode) {

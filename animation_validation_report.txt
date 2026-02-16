@@ -1,0 +1,34 @@
+=== SPINE ANIMATION VALIDATION REPORT ===
+
+Generated: 2026-01-04 00:48:45.808079
+
+=== EXECUTIVE SUMMARY ===
+Total animations: 4
+✅ Safe animations: 3
+❌ Unsafe animations: 1
+Critical errors: 2
+Warnings (non-critical): 0
+
+=== CRITICAL ISSUES (REQUIRE FIX) ===
+
+--- Animation: "death" ---
+  ❌ [Instance of 'AnimationIssue'.type] Bone "eye-veins-controller": Missing keyframe at animation end (last time=1.0, duration=2.1333)
+  ❌ [Instance of 'AnimationIssue'.type] DrawOrder: Last frame draw order != first frame - will cause state pollution
+
+💡 RECOMMENDATION: Fix these issues in Spine Editor to prevent state pollution.
+
+=== ANIMATION SAFETY STATUS ===
+
+✅ Safe to switch (3):
+  - hit
+  - jump
+  - run
+
+❌ Requires reset when switching (1):
+  - death
+
+=== NOTES ===
+• "Frame 0 != setup pose" warnings are NORMAL in Spine and do not need fixing.
+• Only ERRORS (missing keyframes, non-matching last frame) require attention.
+• Runtime currently resets skeleton when switching animations (defensive handling).
+• Fixing critical issues will allow smoother animation transitions in the future.

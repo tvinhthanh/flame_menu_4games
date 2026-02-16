@@ -7,7 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:rive/rive.dart' as rive;
 import 'package:flame_rive/flame_rive.dart';
 
-class TachGame extends FlameGame with TapDetector, DoubleTapDetector {
+class TachGame extends FlameGame {
   // CHANGE THIS to your riv file
   static const _file = 'assets/rive/tutien-tach.riv';
   // If you expect a specific artboard name, set it; otherwise leave 'Artboard'
@@ -83,7 +83,9 @@ class TachGame extends FlameGame with TapDetector, DoubleTapDetector {
       }
 
       if (kDebugMode) {
-        debugPrint('StateMachine found: $_smName with inputs: ${_smInputs.keys}');
+        debugPrint(
+          'StateMachine found: $_smName with inputs: ${_smInputs.keys}',
+        );
       }
 
       // Optional: fire a default trigger or set default bool/number
@@ -98,7 +100,8 @@ class TachGame extends FlameGame with TapDetector, DoubleTapDetector {
         _playAnim(0, artboard);
         if (kDebugMode) debugPrint('Raw animations found: $_anims');
       } else {
-        if (kDebugMode) debugPrint('No state machine and no animations found in artboard.');
+        if (kDebugMode)
+          debugPrint('No state machine and no animations found in artboard.');
       }
     }
 
@@ -129,16 +132,24 @@ class TachGame extends FlameGame with TapDetector, DoubleTapDetector {
 
   // ---------- Gestures ----------
   @override
-  void onTapDown(TapDownInfo _) {
+  void onTapDown(TapDownEvent _) {
     // If we have state machine, try to handle inputs:
     if (_smCtrl != null) {
       // Prefer named triggers if present (InFire / OutFire)
       final triggerIn = _triggers.firstWhere(
-        (t) => t is rive.SMITrigger && (t.name == 'InFire' || t.name == 'In_Fire' || t.name.toLowerCase().contains('in')),
+        (t) =>
+            t is rive.SMITrigger &&
+            (t.name == 'InFire' ||
+                t.name == 'In_Fire' ||
+                t.name.toLowerCase().contains('in')),
         orElse: () => null as rive.SMITrigger,
       );
       final triggerOut = _triggers.firstWhere(
-        (t) => t is rive.SMITrigger && (t.name == 'OutFire' || t.name == 'Out_Fire' || t.name.toLowerCase().contains('out')),
+        (t) =>
+            t is rive.SMITrigger &&
+            (t.name == 'OutFire' ||
+                t.name == 'Out_Fire' ||
+                t.name.toLowerCase().contains('out')),
         orElse: () => null as rive.SMITrigger,
       );
 
@@ -194,7 +205,7 @@ class TachGame extends FlameGame with TapDetector, DoubleTapDetector {
   }
 
   @override
-  void onDoubleTap() {
+  void onDoubleTapDown(TapDownEvent _) {
     // Pause/resume either SM controller or current raw animation controller
     var toggled = false;
     if (_smCtrl != null) {
@@ -204,7 +215,8 @@ class TachGame extends FlameGame with TapDetector, DoubleTapDetector {
     }
     if (!toggled && _animCtrl != null) {
       _animCtrl!.isActive = !_animCtrl!.isActive;
-      if (kDebugMode) debugPrint('Anim controller isActive=${_animCtrl!.isActive}');
+      if (kDebugMode)
+        debugPrint('Anim controller isActive=${_animCtrl!.isActive}');
     }
   }
 

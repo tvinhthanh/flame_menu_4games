@@ -9,9 +9,9 @@ eye-indifferent
 	bounds: 862, 105, 47, 45
 eye-surprised
 	bounds: 505, 79, 47, 45
-front-bracer
+front-bracerS
 	bounds: 826, 66, 29, 40
-front-fist-closed
+front-fist-closedD
 	bounds: 786, 65, 38, 41
 front-fist-open
 	bounds: 710, 51, 43, 44

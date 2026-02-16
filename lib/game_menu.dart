@@ -12,6 +12,7 @@ import 'package:lottie/lottie.dart';
 import 'games/png_game.dart';
 import 'games/json_tiled_game.dart';
 import 'games/atlas_game.dart';
+import 'games/atlas_game_overlay.dart';
 
 enum GameKind {
   png,
@@ -85,7 +86,18 @@ class GameMenuScreen extends StatelessWidget {
       case GameKind.atlas:
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => GameWidget(game: AtlasGame())),
+          MaterialPageRoute(
+            builder: (_) => GameWidget(
+              game: AtlasGame(),
+              overlayBuilderMap: {
+                'animationSelector': (context, game) {
+                  final atlasGame = game as AtlasGame;
+                  return AnimationSelectorOverlay(game: atlasGame);
+                },
+              },
+              initialActiveOverlays: const ['animationSelector'],
+            ),
+          ),
         );
         break;
 

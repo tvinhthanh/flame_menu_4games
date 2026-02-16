@@ -2,20 +2,21 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
 import 'package:flame_rive/flame_rive.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart';
 import 'package:rive/rive.dart' as rive;
 
 class AutoCycleRiveGame extends FlameGame with TapDetector {
-  static const _filePath     = 'assets/rive/TestAdvanced.riv';
+  static const _filePath = 'assets/rive/TestAdvanced.riv';
   static const _artboardName = 'Artboard';
-  static const _smName       = 'State Machine 1';
+  static const _smName = 'State Machine 1';
 
   RiveComponent? _comp;
   rive.Artboard? _artboard;
   rive.StateMachineController? _smController;
-  
+
   // All State Machine inputs
   List<rive.SMIInput> _inputs = [];
   int _currentInputIndex = 0;
@@ -37,9 +38,8 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
       final ab = file.artboardByName(_artboardName) ?? file.mainArtboard;
       ab.advance(0);
       _artboard = ab;
-      
+
       debugPrint('✅ Loaded artboard: ${ab.name}');
-      
     } catch (e) {
       debugPrint('❌ Failed to load Rive file: $e');
       return;
@@ -50,7 +50,7 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
     if (sm != null) {
       _artboard!.addController(sm);
       _smController = sm;
-      
+
       // Collect all inputs
       _inputs = sm.inputs.toList();
       debugPrint('🎮 Found ${_inputs.length} State Machine inputs:');
@@ -58,7 +58,7 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
         final input = _inputs[i];
         debugPrint('  [$i] ${input.name} (${input.runtimeType})');
       }
-      
+
       if (_inputs.isNotEmpty) {
         _setInputState(0); // Start with first input
       }
@@ -75,12 +75,12 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
       priority: 10,
     );
     add(_comp!);
-    
+
     // Add status text
     final statusText = TextComponent(
       text: 'Auto-cycling through all animation states\nTap to manual control',
       position: Vector2(10, 30),
-      
+
       priority: 100,
     );
     add(statusText);
@@ -88,10 +88,10 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
 
   void _setInputState(int index) {
     if (_inputs.isEmpty || index >= _inputs.length) return;
-    
+
     _currentInputIndex = index;
     final input = _inputs[index];
-    
+
     // Reset all inputs first
     for (final inp in _inputs) {
       if (inp is rive.SMIInput<bool>) {
@@ -100,7 +100,7 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
         inp.value = 0.0;
       }
     }
-    
+
     // Activate current input
     if (input is rive.SMIInput<bool>) {
       input.value = true;
@@ -117,11 +117,11 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
   @override
   void update(double dt) {
     super.update(dt);
-    
+
     if (_inputs.isEmpty) return;
-    
+
     _cycleTimer += dt;
-    
+
     if (_cycleTimer >= _cycleDuration) {
       _cycleTimer = 0.0;
       final nextIndex = (_currentInputIndex + 1) % _inputs.length;
@@ -143,7 +143,7 @@ class AutoCycleRiveGame extends FlameGame with TapDetector {
   void onGameResize(Vector2 s) {
     super.onGameResize(s);
     camera.viewfinder.visibleGameSize = s;
-    
+
     if (_comp != null) {
       _comp!.position = s / 2;
       final target = (s.x < s.y ? s.x : s.y) * 0.8;

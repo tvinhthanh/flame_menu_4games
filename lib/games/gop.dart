@@ -18,7 +18,7 @@ class GameConfig {
 /// Game states
 enum GameState { loading, ready, error }
 
-class GopGame extends FlameGame with TapDetector {
+class GopGame extends FlameGame {
   RiveComponent? _comp;
   final void Function(bool isMale)? onGenderSelected;
 
@@ -216,10 +216,10 @@ class GopGame extends FlameGame with TapDetector {
   }
 
   @override
-  void onTapDown(TapDownInfo info) {
+  void onTapDown(TapDownEvent info) {
     if (_comp == null || _currentState != GameState.ready) return;
 
-    final pos = info.eventPosition.global;
+    final pos = info.localPosition;
     _handleCharacterSelection(pos);
   }
 
