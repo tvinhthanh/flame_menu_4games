@@ -1,24 +1,18 @@
 # flame_menu_4games
 
-A new Flutter project.
+Flutter game-menu shell built on the Flame engine, used to work out how Spine
+skeletal animation behaves inside Flutter.
 
-## Getting Started
+The two analysis documents are the substance here:
 
-This project is a starting point for a Flutter application.
+- **[SPINE_ANIMATION_ANALYSIS.md](SPINE_ANIMATION_ANALYSIS.md)** — how Spine
+  skeletons load, bind and play in Flame
+- **[SPINE_UNITY_VS_FLUTTER.md](SPINE_UNITY_VS_FLUTTER.md)** — where the Flutter
+  runtime diverges from the Unity one, and what does not port across
 
-A few resources to get you started if this is your first Flutter project:
+`adjust_skeleton_bounds.dart` is a utility for correcting skeleton bounding boxes
+that import wrong.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-clean and rebuild
-flutter clean
-rmdir /s /q .dart_tool
-rmdir /s /q build
-flutter pub get
-flutter run
-"# flame_menu_4games" 
+```bash
+flutter pub get && flutter run
+```
